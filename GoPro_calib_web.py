@@ -5,13 +5,13 @@
 
 #This program calculates the distortion parameters of a GoPro camera.
 #A video must first be taken of a chessboard pattern moved to a variety of positions
-#in the field of view with a GoPro.  
+#in the field of view with a GoPro.
 
 import cv2, sys
 import numpy as np
 
 #Import Information
-filename = 'GOPR005.MP4'
+filename = 'Segment_0002.mp4'
 #Input the number of board images to use for calibration (recommended: ~20)
 n_boards = 20
 #Input the number of squares on the board (width and height)
@@ -48,14 +48,14 @@ def ImageCollect(filename, n_boards):
     status = video.isOpened()
 
     if status == True:
-        
+
         #Collect metadata about the file.
-        FPS = video.get(cv2.cv.CV_CAP_PROP_FPS)
+        FPS = video.get(cv2.CAP_PROP_FPS)
         FrameDuration = 1/(FPS/1000)
-        width = video.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)
-        height = video.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)
+        width = video.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = video.get(cv2.CAP_PROP_FRAME_HEIGHT)
         size = (int(width), int(height))
-        total_frames = video.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)
+        total_frames = video.get(cv2.CAP_PROP_FRAME_COUNT)
 
         #Initializes the frame counter and collected_image counter
         current_frame = 0
@@ -64,10 +64,10 @@ def ImageCollect(filename, n_boards):
         #Video loop.  Press spacebar to collect images.  ESC terminates the function.
         while current_frame < total_frames:
             success, image = video.read()
-            current_frame = video.get(cv2.cv.CV_CAP_PROP_POS_FRAMES)
+            current_frame = video.get(cv2.CAP_PROP_POS_FRAMES)
             cv2.imshow('Video', image)
             k = cv2.waitKey(int(FrameDuration)) #You can change the playback speed here
-            if collected_images == n_boards: 
+            if collected_images == n_boards:
                 break
             if k == 32:
                 collected_images += 1
@@ -75,7 +75,7 @@ def ImageCollect(filename, n_boards):
                 print(str(collected_images) + ' images collected.')
             if k == 27:
                 break
-    
+
         #Clean up
         video.release()
         cv2.destroyAllWindows()
@@ -107,7 +107,7 @@ def ImageCollect(filename, n_boards):
 #close to zero.
 
 #Finally the function will go through the calbration images and display the undistorted image.
-    
+
 def ImageProcessing(n_boards, board_w, board_h, board_dim):
     #Initializing variables
     board_n = board_w * board_h
@@ -125,16 +125,16 @@ def ImageProcessing(n_boards, board_w, board_h, board_dim):
 
     #Loop through the images.  Find checkerboard corners and save the data to ipts.
     for i in range(1, n_boards + 1):
-    
+
         #Loading images
-        print 'Loading... Calibration_Image' + str(i) + '.png' 
+        print 'Loading... Calibration_Image' + str(i) + '.png'
         image = cv2.imread('Calibration_Image' + str(i) + '.png')
-    
+
         #Converting to grayscale
         grey_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
         #Find chessboard corners
-        found, corners = cv2.findChessboardCorners(grey_image, (board_w,board_h),cv2.cv.CV_CALIB_CB_ADAPTIVE_THRESH + cv2.cv.CV_CALIB_CB_NORMALIZE_IMAGE)
+        found, corners = cv2.findChessboardCorners(grey_image, (board_w,board_h),cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_NORMALIZE_IMAGE)
         print (found)
 
         if found == True:
@@ -148,14 +148,14 @@ def ImageProcessing(n_boards, board_w, board_h, board_dim):
 
             #Draw chessboard corners
             cv2.drawChessboardCorners(image, (board_w, board_h), corners, found)
-        
+
             #Show the image with the chessboard corners overlaid.
             cv2.imshow("Corners", image)
 
         char = cv2.waitKey(0)
 
-    cv2.destroyWindow("Corners") 
-    
+    cv2.destroyWindow("Corners")
+
     print ''
     print 'Finished processes images.'
 
@@ -170,7 +170,7 @@ def ImageProcessing(n_boards, board_w, board_h, board_dim):
     print(' ')
     print('Distortion Coefficients: ')
     print(str(distCoeff))
-    print(' ') 
+    print(' ')
 
     #Save data
     print 'Saving data file...'
@@ -188,9 +188,9 @@ def ImageProcessing(n_boards, board_w, board_h, board_dim):
 
     #Undistort Images
     for i in range(1, n_boards + 1):
-    
+
         #Loading images
-        print 'Loading... Calibration_Image' + str(i) + '.png' 
+        print 'Loading... Calibration_Image' + str(i) + '.png'
         image = cv2.imread('Calibration_Image' + str(i) + '.png')
 
         # undistort
@@ -210,7 +210,7 @@ print("calibration images.")
 print(" ")
 print('We will collect ' + str(n_boards) + ' calibration images.')
 
-#ImageCollect(filename, n_boards)
+ImageCollect(filename, n_boards)
 
 print(' ')
 print('All the calibration images are collected.')
