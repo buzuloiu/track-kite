@@ -18,8 +18,11 @@ args = vars(ap.parse_args())
 # define the lower and upper boundaries of the "green"
 # ball in the HSV color space, then initialize the
 # list of tracked points
-greenLower = (29, 86, 6)
-greenUpper = (64, 255, 255)
+#greenLower = (29, 86, 6)
+#greenUpper = (64, 255, 255)
+
+greenLower = (-13, 153, 125)
+greenUpper = (27, 193, 205)
 pts = deque(maxlen=args["buffer"])
 
 # if a video path was not supplied, grab the reference
@@ -38,6 +41,7 @@ time.sleep(2.0)
 while True:
     # grab the current frame
     frame = vs.read()
+    #frame_time = time.now()
 
     # handle the frame from VideoCapture or VideoStream
     frame = frame[1] if args.get("video", False) else frame
@@ -103,7 +107,7 @@ while True:
     # show the frame to our screen
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1) & 0xFF
-
+    print(center)
     # if the 'q' key is pressed, stop the loop
     if key == ord("q"):
         break
