@@ -1,29 +1,41 @@
-#include <Stepper.h>
+int x;
 
 const double pi = 3.1415926;
 const int stepsPerRevolution = 200;
 int stepperSpeed = 60;
 const double innerRad = 0.05;
-                          
-Stepper myStepper1(stepsPerRevolution,2,3,4,5);
-Stepper myStepper2(stepsPerRevolution,8,9,10,11);
+
+const int stepPin1 = 3; 
+const int dirPin1 = 3;
+const int stepPin2 = 4; 
+const int dirPin2 = 5;
 
 void setup() {
-  myStepper1.setSpeed(stepperSpeed);
-  myStepper2.setSpeed(stepperSpeed);
+  pinMode(stepPin1,OUTPUT); 
+  pinMode(dirPin1,OUTPUT);
+  pinMode(stepPin2,OUTPUT); 
+  pinMode(dirPin2,OUTPUT);
 
   Serial.begin(9600);
 }
 
 void loop() {
-  if (Serial.avaliable()) {
-    double differential = Serial.parseFloat();
-    int stepCount = diff2steps( differential/2 );
+  sweep();
+//  if (Serial.avaliable()) {
+//    double differential = Serial.parseFloat();
+//    int stepCount = diff2steps( differential/2 );
+//    
+//    if (differential < 0) {
+//      driveStepper1();
+//      driveStepper2();
+//    }
+//    else {
+//      driveStepper2();
+//      driveStepper1();
+//    }    
+//  }
+//  delay(500);
 
-    myStepper1.step(stepCount);
-    myStepper2.step(-stepCount);
-  }
-  delay(250);
 }
 
 int diff2steps(double diff) {
@@ -31,4 +43,58 @@ int diff2steps(double diff) {
   int stepCount = round( diff/lenPerStep );
   
   return stepCount;
+}
+
+void sweep(){
+  digitalWrite(stepPin1,HIGH); // Set Dir high
+  for(x = 0; x < 200; x++) {
+    digitalWrite(5,HIGH);
+    delay(10);
+    digitalWrite(5,LOW);
+    delay(100);
+  }
+  delay(1000);
+  digitalWrite(stepPin1,LOW); 
+  for(x = 0; x < 200; x++) {
+    digitalWrite(5,HIGH);
+    delay(10);
+    digitalWrite(5,LOW);
+    delay(100);
+  }
+  delay(1000);
+  
+  digitalWrite(stepPin2,HIGH); // Set Dir high
+  for(x = 0; x < 200; x++) {
+    digitalWrite(5,HIGH);
+    delay(10);
+    digitalWrite(5,LOW);
+    delay(100);
+  }
+  delay(1000);
+  digitalWrite(stepPin2,LOW);
+  for(x = 0; x < 200; x++) {
+    digitalWrite(5,HIGH);
+    delay(10);
+    digitalWrite(5,LOW);
+    delay(100);
+  }
+  delay(1000);
+}
+
+void driveStepper1(int stepCount) {
+  for (x = 0; x < stepCount; x++) {
+    digitalWrite(dirPin1,HIGH);
+    digitalWrite(stepPin1, HIGH);
+    delay(10);
+    digitalWrite(stepPin1, LOW);
+  }
+}
+
+void driveStepper2(int stepCount) {
+  for (x = 0; x < stepCount; x++) {
+    digitalWrite(dirPin2,HIGH);
+    digitalWrite(stepPin2, HIGH);
+    delay(10);
+    digitalWrite(stepPin2, LOW);
+  }
 }
