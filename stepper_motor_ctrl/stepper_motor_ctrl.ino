@@ -26,10 +26,14 @@ void loop() {
 //    int stepCount = diff2steps( differential/2 );
 //    
 //    if (differential < 0) {
+//      digitalWrite(dirPin1,HIGH);
+//      digitalWrite(dirPin2,LOW);
 //      driveStepper1();
 //      driveStepper2();
 //    }
 //    else {
+//      digitalWrite(dirPin1,LOW);
+//      digitalWrite(dirPin2,HIGH);
 //      driveStepper2();
 //      driveStepper1();
 //    }    
@@ -79,7 +83,6 @@ void sweep(){
 
 void driveStepper1(int stepCount) {
   for (x = 0; x < stepCount; x++) {
-    digitalWrite(dirPin1,HIGH);
     digitalWrite(stepPin1, HIGH);
     delay(10);
     digitalWrite(stepPin1, LOW);
@@ -88,7 +91,6 @@ void driveStepper1(int stepCount) {
 
 void driveStepper2(int stepCount) {
   for (x = 0; x < stepCount; x++) {
-    digitalWrite(dirPin2,HIGH);
     digitalWrite(stepPin2, HIGH);
     delay(10);
     digitalWrite(stepPin2, LOW);
