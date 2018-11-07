@@ -5,10 +5,10 @@ const int stepsPerRevolution = 200;
 int stepperSpeed = 60;
 const double innerRad = 0.05;
 
-const int stepPin1 = 3; 
-const int dirPin1 = 3;
-const int stepPin2 = 4; 
-const int dirPin2 = 5;
+const int dirPin1 = 2; 
+const int stepPin1 = 3;
+const int dirPin2 = 4; 
+const int stepPin2 = 5;
 
 void setup() {
   pinMode(stepPin1,OUTPUT); 
@@ -48,35 +48,31 @@ int diff2steps(double diff) {
 void sweep(){
   digitalWrite(stepPin1,HIGH); // Set Dir high
   for(x = 0; x < 200; x++) {
-    digitalWrite(5,HIGH);
+    digitalWrite(stepPin1,HIGH);
     delay(10);
-    digitalWrite(5,LOW);
-    delay(100);
+    digitalWrite(stepPin1,LOW);
   }
   delay(1000);
   digitalWrite(stepPin1,LOW); 
   for(x = 0; x < 200; x++) {
-    digitalWrite(5,HIGH);
+    digitalWrite(stepPin1,HIGH);
     delay(10);
-    digitalWrite(5,LOW);
-    delay(100);
+    digitalWrite(stepPin1,LOW);
   }
   delay(1000);
   
   digitalWrite(stepPin2,HIGH); // Set Dir high
   for(x = 0; x < 200; x++) {
-    digitalWrite(5,HIGH);
+    digitalWrite(stepPin2,HIGH);
     delay(10);
-    digitalWrite(5,LOW);
-    delay(100);
+    digitalWrite(stepPin2,LOW);
   }
   delay(1000);
   digitalWrite(stepPin2,LOW);
   for(x = 0; x < 200; x++) {
-    digitalWrite(5,HIGH);
+    digitalWrite(stepPin2,HIGH);
     delay(10);
-    digitalWrite(5,LOW);
-    delay(100);
+    digitalWrite(stepPin2,LOW);
   }
   delay(1000);
 }
