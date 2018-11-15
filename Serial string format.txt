@@ -1,0 +1,8 @@
+Serial data string: 8 integers
+
+1st and 4th are sign digits, rest are value digits.
+	If sign digits == 0, then the value is positive,
+	else its negative.
+
+ie.    12345678 --> -234, -678
+       02340678 --> 234, 678
