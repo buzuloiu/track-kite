@@ -6,7 +6,7 @@ class RoboController(object):
         pass
 
     def compute_delta(self):
-        return randint(-50, 50)
+        return randint(-5, 5)
 
 class XboxController(object):
     def __init__(self, gain=2):

@@ -33,11 +33,17 @@ class Actuator(object):
 
 
     def send_command(self, move_left, move_right):
+        if move_left not in range(-999, 1000) or move_right not in range(-999, 1000):
+            raise Exception('movement out of range [-999, 999]')
+
         self.left_motor_pos += move_left
         self.right_motor_pos += move_right
 
         self.last_update=time.time()
-        self.serial.write('{:+4d}{:+4d}'.format(int(move_left), int(move_right)))
+        self.serial.write(
+            '{:+d}'.format(int(move_left)).zfill(4) +
+            '{:+d}'.format(int(move_right)).zfill(4)
+        )
 
     def delta(self):
         return self.left_motor_pos - self.right_motor_pos
