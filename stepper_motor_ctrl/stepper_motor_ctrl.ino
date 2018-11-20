@@ -35,19 +35,19 @@ void move_motor(Motor motor, int num_steps) {
 void loop() {
   while (Serial.available() < 1) {
     String read_str = Serial.readString();
-    String sign1s = read_str.substring(0,1);
-    String sign2s = read_str.substring(4,5);
+    String sign1 = read_str.substring(0,1);
+    String sign2 = read_str.substring(4,5);
     String str1 = read_str.substring(1, 4);
     String str2 = read_str.substring(5, 8);
 
-    int sign1 = sign1s.toInt();
-    int sign2 = sign2s.toInt();
+//    int sign1 = sign1s.toInt();
+//    int sign2 = sign2s.toInt();
     int move1 = str1.toInt();
     int move2 = str2.toInt();
-    if (sign1 != 0){
+    if (sign1 != "+"){
       move1 = -1*move1;
     }
-    if (sign2 != 0){
+    if (sign2 == "+"){
       move2 = -1*move2;
     }
 
