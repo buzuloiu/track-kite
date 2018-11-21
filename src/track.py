@@ -22,7 +22,7 @@ class Camera(object):
         self.greenUpper = (27, 193, 205)
 
     def move_origin(self, point):
-        return (point[1]-540, point[0])
+        return (point[1]-540, point[0]-250)
 
 
 class Frame(object):
@@ -49,6 +49,7 @@ def undistort(frame, camera, DIM=(1920, 1080), balance=1.0, dim2=None, dim3=None
     new_K = cv2.fisheye.estimateNewCameraMatrixForUndistortRectify(scaled_K, camera.D, dim2, np.eye(3), balance=balance)
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(scaled_K, camera.D, np.eye(3), new_K, dim3, cv2.CV_16SC2)
     frame.image = cv2.remap(frame.image, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    frame.image = imutils.rotate_bound(frame.image, 270)
     return frame
 
 
@@ -98,8 +99,8 @@ if __name__ == "__main__":
     # keep looping
     while True:
         frame = Frame(camera.stream.read())
-        frame = undistort(frame, camera)
         frame = get_x_y(frame, camera)
+        frame = undistort(frame, camera)
         cv2.imshow("Frame", frame.image)
         key = cv2.waitKey(1) & 0xFF
         print(frame.center)
