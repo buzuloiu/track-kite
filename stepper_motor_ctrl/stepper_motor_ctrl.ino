@@ -66,6 +66,9 @@ void loop() {
 //    move_motor(right_motor, move2);
 
   inRead[0] = (char)0;
+  tmp[0] = (char)0;
+  textA[0] = (char)0;
+  textB[0] = (char)0;
   }
   
 //  while ( true ) {
