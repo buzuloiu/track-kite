@@ -9,7 +9,7 @@ class RoboController(object):
         return randint(-5, 5)
 
 class XboxController(object):
-    def __init__(self, gain=2):
+    def __init__(self, gain=200):
         self.gain = gain
         self.controller = Xbox360Controller(0, axis_threshold=0.1)
         self.last_read = 0

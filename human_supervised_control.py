@@ -2,7 +2,7 @@ from src.controllers import XboxController, RoboController
 from src.actuators import connect_actuator
 import time
 
-CONTROL_LATENCY=0.5
+CONTROL_LATENCY=1 #s
 
 if __name__ == '__main__':
     active = True
@@ -18,5 +18,5 @@ if __name__ == '__main__':
         else:
             delta = robot_controller.compute_delta()
 
-        time.sleep(max(0, time.time()-actuator.last_update))
+        time.sleep(max(0, CONTROL_LATENCY - (time.time() - actuator.last_update)))
         actuator.set_delta(delta)
