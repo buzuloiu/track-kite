@@ -6,11 +6,12 @@ import cv2
 import imutils
 import time
 from src.colours import colours
+from threading import Thread
 
 
-class Camera(object):
+class Camera(Thread):
     def __init__(self, colour):
-        self.stream = VideoStream(src=1).start()
+        self.stream = VideoStream(src=0).start()
         self.K = np.array([[843.417665466078, 0.0, 890.9156601341177],
                            [0.0, 641.0593481957064, 520.9331642157647],
                            [0.0, 0.0, 1.0]])
@@ -21,6 +22,24 @@ class Camera(object):
         self.pts = deque(maxlen=64)
         self.greenLower = colours[colour]['low']
         self.greenUpper = colours[colour]['high']
+        self.active = False
+        self.position = (0, 0, 0)
+
+    def activate(self):
+        if not self.active:
+            Thread.__init__(self)
+            self.active = True
+            self.start()
+            if not self.is_alive():
+                raise Exception('Failed to activate kinetics model')
+
+    def deactivate(self):
+        if self.active:
+            self.active = False
+            self.join(timeout=1)
+            if self.is_alive():
+                raise Exception('Failed to deactivate Kinetics Model')
+
 
     def undistort(self, frame, DIM=(1920, 1080), balance=1.0, dim2=None, dim3=None):
         dim1 = frame.image.shape[:2][::-1]  # dim1 is the dimension of input image to un-distort
@@ -49,6 +68,16 @@ class Camera(object):
         frame.rotate(90)
         frame.move_origin()
         return frame
+
+    def run(self):
+        while self.active:
+            frame = self.capture_frame()
+            frame.find_kite(self)
+            frame = self.undistort(frame)
+            frame.rotate(90)
+            frame.move_origin()
+            if frame.center:
+                self.position = (frame.center[0], frame.center[1], frame.time)
 
 
 class Frame(object):

@@ -13,13 +13,14 @@ class RoboController(object):
         self.previous_delta = 0.0
         self.maximumDeflectMeters = 0.3
         self.camera = Camera('kite')
+        self.camera.activate()
 
     def compute_delta(self):
-        frame = self.camera.capture_and_process()
-        print(frame.time, frame.center)
+        frame = self.camera.position
+        print(frame[0], frame[1])
 
         try:
-            commandedDeflection = np.interp(frame.center[0], self.xRange, self.xTable)
+            commandedDeflection = np.interp(frame[0], self.xRange, self.xTable)
             self.maximumDeflectMeters = 0.3*commandedDeflection
             self.current_delta = self.maximumDeflectMeters
             self.previous_delta = self.maximumDeflectMeters
