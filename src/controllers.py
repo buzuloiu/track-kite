@@ -1,6 +1,7 @@
 from xbox360controller import Xbox360Controller
 from random import randint
 import numpy as np
+from src.track import Camera
 
 class RoboController(object):
     def __init__(self):
@@ -8,14 +9,14 @@ class RoboController(object):
         self.xTable = [-1, -0.75, -0.60, -0.45, -0.40, -0.25, -0.05, 0, 0.05, 0.25, 0.40, 0.45, 0.60, 0.75, 1]
         self.current_delta = 0.0
         self.maximumDeflectMeters = 0.3
+        self.camera = Camera('kite')
 
-    def compute_delta(self, feedback):
+    def compute_delta(self):
 
-        currentX = feedback.x
-        currentY = feedback.y
-        currentT = feedback.t
+        frame = self.camera.capture_and_process()
+        print(frame.time, frame.center)
 
-        commandedDeflection = np.interp(currentX, self.xRange, self.xTable)
+        commandedDeflection = np.interp(frame.center[0], self.xRange, self.xTable)
         self.maximumDeflectMeters = 0.3*commandedDeflection
         self.current_delta = self.maximumDeflectMeters
 
