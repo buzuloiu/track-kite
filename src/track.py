@@ -44,10 +44,10 @@ class Camera(object):
 
     def capture_and_process(self):
         frame = self.capture_frame()
+        frame.find_kite(self)
         frame = camera.undistort(frame)
         frame.rotate(90)
-        frame.find_kite(self)
-        # frame.move_origin()
+        frame.move_origin()
         return frame
 
 
@@ -103,7 +103,8 @@ class Frame(object):
         self.image = imutils.rotate_bound(self.image, degrees)
 
     def move_origin(self):
-        self.center = (self.center[1]-540, self.center[0]-25)
+        if self.center:
+            self.center = (self.center[1]-500, abs(self.center[0]-1900))
 
 
 # example
