@@ -28,19 +28,18 @@ class RoboController(object):
         return self.current_delta
 
 class XboxController(object):
-    def __init__(self, gain=200):
+    def __init__(self, gain=2e-2):
         self.gain = gain
         self.controller = Xbox360Controller(0, axis_threshold=0.1)
         self.last_read = 0
         self.current_delta = 0.0
 
     def compute_delta(self):
-        left_trigger = self.controller.trigger_l.value
-        right_trigger = self.controller.trigger_r.value
-
-        self.current_delta += self.gain*(left_trigger - right_trigger)
-
+        self.current_delta -= self.gain*self.controller.axis_l.x
         return self.current_delta
+
+    def compute_absolute(self):
+        return self.gain*self.controller.axis_r.y
 
     def active(self):
         return not self.controller.button_a.is_pressed
