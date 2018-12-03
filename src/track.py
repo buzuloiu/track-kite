@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 import imutils
 import time
-from colours import colours
+from src.colours import colours
 
 
 class Camera(object):
