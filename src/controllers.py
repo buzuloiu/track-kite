@@ -39,11 +39,6 @@ class XboxController(object):
         self.current_delta -= self.gain*self.controller.axis_l.x
         return self.current_delta
 
-    def compute_absolute(self):
-        return self.gain*self.controller.axis_r.y
-
-    def active(self):
-        return not self.controller.button_a.is_pressed
 
 class WASDController(object):
     def __init__(self, gain=2e-2):
@@ -59,14 +54,6 @@ class WASDController(object):
             delta=-1
         self.current_delta -= self.gain*delta
         return self.current_delta
-
-    def compute_absolute(self):
-        delta=0
-        if keyboard.is_pressed('w'):
-            delta=1
-        elif keyboard.is_pressed('s'):
-            delta=-1
-        return self.gain*delta
 
     def active(self):
         return not keyboard.is_pressed('q')

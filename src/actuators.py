@@ -18,53 +18,30 @@ def connect_actuator():
 class Actuator(object):
     def __init__(self, comm):
         self.last_update=time.time()
-
-        self.left_motor_pos=0.0
-        self.right_motor_pos=0.0
-
+        self.delta=0.0
         self.serial = Serial(comm, baudrate=115200)
 
         if not self.serial.isOpen():
             self.serial.open()
 
     def set_delta(self, delta):
-        delta -= self.delta()
-
-        move_left = delta/2
-        move_right = -1 * move_left
-
-        self.send_command(move_left, move_right)
-
-
-    def send_command(self, move_left, move_right):
-        self.left_motor_pos += move_left
-        self.right_motor_pos += move_right
-
-        move_left /= STEPS_TO_METERS
-        move_right /= STEPS_TO_METERS
-        move_left=int(move_left)
-        move_right=int(move_right)
-
-        if move_left not in range(-999, 1000) or move_right not in range(-999, 1000):
-            print 'movement [{}, {}] out of range [-999, 999]'.format(move_left, move_right)
-            raise
-        #elif move_left == 0 or move_right == 0:
-        #    return
-
+        delta /= STEPS_TO_METERS
         self.last_update=time.time()
-        cmd = (
-            '{:+d}'.format(int(move_left)).zfill(4) +
-            '{:+d}'.format(int(move_right)).zfill(4)
-        )
-        print cmd
-        self.serial.write(cmd)
 
-    def delta(self):
-        return self.left_motor_pos - self.right_motor_pos
+        new_delta = delta
+        delta -= self.delta
+        self.delta = new_delta
+
+        delta = min(127, delta);
+        delta = max(-127, delta);
+
+        if int(delta) is not 0:
+            print int(128+delta)
+            self.serial.write(bytearray([int(128 + delta)]))
 
 class MockSerial(object):
     def write(self, msg):
-        pass
+        print msg
 
 class DummyActuator(Actuator):
     def __init__(self):
