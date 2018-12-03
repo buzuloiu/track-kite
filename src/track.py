@@ -45,7 +45,7 @@ class Camera(object):
     def capture_and_process(self):
         frame = self.capture_frame()
         frame.find_kite(self)
-        frame = camera.undistort(frame)
+        frame = self.undistort(frame)
         frame.rotate(90)
         frame.move_origin()
         return frame

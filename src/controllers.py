@@ -17,7 +17,7 @@ class RoboController(object):
         frame = self.camera.capture_and_process()
         print(frame.time, frame.center)
 
-        try
+        try:
             commandedDeflection = np.interp(frame.center[0], self.xRange, self.xTable)
             self.maximumDeflectMeters = 0.3*commandedDeflection
             self.current_delta = self.maximumDeflectMeters
