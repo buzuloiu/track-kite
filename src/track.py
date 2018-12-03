@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 import imutils
 import time
-from calibration.colours import colours
+from colours import colours
 
 
 class Camera(object):
@@ -45,7 +45,7 @@ class Camera(object):
     def capture_and_process(self):
         frame = self.capture_frame()
         frame = camera.undistort(frame)
-        frame.rotate(270)
+        frame.rotate(90)
         frame.find_kite(self)
         # frame.move_origin()
         return frame
@@ -108,7 +108,7 @@ class Frame(object):
 
 # example
 if __name__ == "__main__":
-    camera = Camera('blue_pen')
+    camera = Camera('kite')
     # keep looping
     while True:
         frame = camera.capture_and_process()
