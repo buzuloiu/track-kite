@@ -13,7 +13,7 @@ void setup() {
   setup_motor(left_motor);
   setup_motor(right_motor);
 
-  Serial.begin(2000000);
+  Serial.begin(115200);
 }
 
 void move_motor(Motor motor, int num_steps) {
@@ -38,9 +38,9 @@ void loop() {
   char textA[5];
   char textB[5];
   memset(tmp, 0, sizeof(tmp));
-      
+
   while (Serial.available() >= 8) {
-    
+
     for (byte i=0; i<8; i++){
       inRead[i] = Serial.read();
     }
@@ -58,7 +58,7 @@ void loop() {
 //    if (inRead[4] != "+") {
 //      move2 = -1*move2;
 //    }
-//    
+//
 //    Serial.println(move1);
 //    Serial.println(move2);
 //    delay(1000);
@@ -70,7 +70,7 @@ void loop() {
   textA[0] = (char)0;
   textB[0] = (char)0;
   }
-  
+
 //  while ( true ) {
 //    move_motor(left_motor, 100);
 //    move_motor(left_motor, -100);

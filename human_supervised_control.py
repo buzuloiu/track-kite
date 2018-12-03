@@ -1,13 +1,13 @@
-from src.controllers import XboxController, RoboController
+from src.controllers import WASDController, RoboController
 from src.actuators import connect_actuator
 import time
 
-CONTROL_LATENCY=1 #s
+CONTROL_LATENCY=3#s
 
 if __name__ == '__main__':
     active = True
 
-    human_controller = XboxController()
+    human_controller = WASDController()
     robot_controller = RoboController()
     actuator = connect_actuator()
 

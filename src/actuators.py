@@ -22,7 +22,7 @@ class Actuator(object):
         self.left_motor_pos=0.0
         self.right_motor_pos=0.0
 
-        self.serial = Serial(comm, baudrate=2000000)
+        self.serial = Serial(comm, baudrate=115200)
 
         if not self.serial.isOpen():
             self.serial.open()

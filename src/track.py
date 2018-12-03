@@ -10,7 +10,7 @@ from src.colours import colours
 
 class Camera(object):
     def __init__(self, colour):
-        self.stream = VideoStream(src=0).start()
+        self.stream = VideoStream(src=1).start()
         self.K = np.array([[843.417665466078, 0.0, 890.9156601341177],
                            [0.0, 641.0593481957064, 520.9331642157647],
                            [0.0, 0.0, 1.0]])

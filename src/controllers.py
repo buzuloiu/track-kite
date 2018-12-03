@@ -1,6 +1,8 @@
 from xbox360controller import Xbox360Controller
 from random import randint
 import numpy as np
+import keyboard
+
 from src.track import Camera
 
 class RoboController(object):
@@ -13,7 +15,6 @@ class RoboController(object):
         self.camera = Camera('kite')
 
     def compute_delta(self):
-
         frame = self.camera.capture_and_process()
         print(frame.time, frame.center)
 
@@ -43,3 +44,29 @@ class XboxController(object):
 
     def active(self):
         return not self.controller.button_a.is_pressed
+
+class WASDController(object):
+    def __init__(self, gain=2e-2):
+        self.gain = gain
+        self.last_read = 0
+        self.current_delta = 0.0
+
+    def compute_delta(self):
+        delta=0
+        if keyboard.is_pressed('a'):
+            delta=1
+        elif keyboard.is_pressed('d'):
+            delta=-1
+        self.current_delta -= self.gain*delta
+        return self.current_delta
+
+    def compute_absolute(self):
+        delta=0
+        if keyboard.is_pressed('w'):
+            delta=1
+        elif keyboard.is_pressed('s'):
+            delta=-1
+        return self.gain*delta
+
+    def active(self):
+        return not keyboard.is_pressed('q')
