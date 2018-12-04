@@ -37,20 +37,18 @@ class Actuator(object):
         self.next_update=time.time() + abs(applied_delta)/STEPS_PER_SECOND
         self.serial.write(bytearray([int(128 + applied_delta)]))
         self.delta_steps = delta_steps
-        print applied_delta
+        print 'Current Delta: {} | Applied Delta {}'.format(self.delta(), applied_delta)
 
     def delta(self):
         return STEPS_TO_METERS*self.delta_steps
 
 class MockSerial(object):
+
     def write(self, msg):
-        print msg
+        pass
 
 class DummyActuator(Actuator):
     def __init__(self):
-        self.last_update=time.time()
-
-        self.left_motor_pos=0.0
-        self.right_motor_pos=0.0
-
+        self.next_update=time.time()
+        self.delta_steps=0
         self.serial = MockSerial()
