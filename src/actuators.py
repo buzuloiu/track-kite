@@ -25,6 +25,7 @@ class Actuator(object):
             self.serial.open()
 
     def set_delta(self, delta):
+        print delta
         delta /= STEPS_TO_METERS
         self.last_update=time.time()
 
@@ -36,7 +37,6 @@ class Actuator(object):
         delta = max(-127, delta);
 
         if int(delta) is not 0:
-            print int(128+delta)
             self.serial.write(bytearray([int(128 + delta)]))
 
 class MockSerial(object):

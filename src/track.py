@@ -11,7 +11,7 @@ from threading import Thread
 
 class Camera(Thread):
     def __init__(self, colour):
-        self.stream = VideoStream(src=1).start()
+        self.stream = VideoStream(src=0).start()
         self.K = np.array([[843.417665466078, 0.0, 890.9156601341177],
                            [0.0, 641.0593481957064, 520.9331642157647],
                            [0.0, 0.0, 1.0]])
@@ -24,6 +24,7 @@ class Camera(Thread):
         self.greenUpper = colours[colour]['high']
         self.active = False
         self.position = (0, 0, 0)
+        self.image = self.capture_and_process()
 
     def activate(self):
         if not self.active:
@@ -76,6 +77,7 @@ class Camera(Thread):
             frame = self.undistort(frame)
             frame.rotate(90)
             frame.move_origin()
+            self.image = frame.image
             if frame.center:
                 self.position = (frame.center[0], frame.center[1], frame.time)
 
