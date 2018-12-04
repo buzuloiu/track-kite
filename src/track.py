@@ -153,7 +153,9 @@ if __name__ == "__main__":
     camera.activate()
     # keep looping
     while True:
-        print camera.position
+        print(camera.position)
+        import pdb; pdb.set_trace()
+        cv2.imshow('feed', camera.image)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
