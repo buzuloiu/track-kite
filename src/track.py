@@ -11,7 +11,7 @@ from threading import Thread
 
 class Camera(Thread):
     def __init__(self, colour):
-        self.stream = VideoStream(src=0).start()
+        self.stream = VideoStream(src=1).start()
         self.K = np.array([[843.417665466078, 0.0, 890.9156601341177],
                            [0.0, 641.0593481957064, 520.9331642157647],
                            [0.0, 0.0, 1.0]])
@@ -139,13 +139,10 @@ class Frame(object):
 # example
 if __name__ == "__main__":
     camera = Camera('kite')
+    camera.activate()
     # keep looping
     while True:
-        frame = camera.capture_and_process()
-        cv2.imshow("Frame", frame.image)
-        print(frame.time, frame.center)
-
-        # if the 'q' key is pressed, stop the loop
+        print camera.position
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break

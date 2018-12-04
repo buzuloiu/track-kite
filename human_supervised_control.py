@@ -2,7 +2,7 @@ from src.controllers import WASDController, RoboController
 from src.actuators import connect_actuator
 import time
 
-CONTROL_LATENCY=5e-2#s
+CONTROL_LATENCY=5e-3#s
 
 if __name__ == '__main__':
     active = True

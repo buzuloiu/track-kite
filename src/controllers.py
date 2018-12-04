@@ -11,14 +11,12 @@ class RoboController(object):
         self.xTable = [-1, -0.75, -0.60, -0.45, -0.40, -0.25, -0.05, 0, 0.05, 0.25, 0.40, 0.45, 0.60, 0.75, 1]
         self.current_delta = 0.0
         self.previous_delta = 0.0
-        self.maximumDeflectMeters = 0.3
+        self.maximumDeflectMeters = 7.85e-3
         self.camera = Camera('kite')
         self.camera.activate()
 
     def compute_delta(self):
         frame = self.camera.position
-        print(frame[0], frame[1])
-
         try:
             commandedDeflection = np.interp(frame[0], self.xRange, self.xTable)
             self.maximumDeflectMeters = 0.3*commandedDeflection
@@ -30,7 +28,7 @@ class RoboController(object):
         return self.current_delta
 
 class XboxController(object):
-    def __init__(self, gain=2e-2):
+    def __init__(self, gain=7e-3):
         self.gain = gain
         self.controller = Xbox360Controller(0, axis_threshold=0.1)
         self.last_read = 0
@@ -42,7 +40,7 @@ class XboxController(object):
 
 
 class WASDController(object):
-    def __init__(self, gain=2e-2):
+    def __init__(self, gain=7e-3):
         self.gain = gain
         self.last_read = 0
         self.current_delta = 0.0
