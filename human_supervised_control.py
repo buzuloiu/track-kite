@@ -23,6 +23,9 @@ if __name__ == '__main__':
 
         time.sleep(max(0, actuator.next_update - time.time()))
         actuator.set_delta(delta)
-        #cv2.imshow('video_feed', robot_controller.camera.image)
-        #if cv2.waitKey(1) == 27:
-        #    break
+        cv2.imshow('video_feed', robot_controller.camera.image)
+        if cv2.waitKey(1) == 27:
+            break
+    robot_controller.camera.stream.stop()
+    cv2.destroyAllWindows()
+    robot_controller.camera.deactivate()
