@@ -1,10 +1,9 @@
 # from xbox360controller import Xbox360Controller
-from random import randint
 import numpy as np
 import keyboard
-import cv2
 
 from src.track import Camera
+
 
 class RoboController(object):
     def __init__(self):
@@ -22,10 +21,12 @@ class RoboController(object):
             commandedDeflection = np.interp(frame[0], self.xRange, self.xTable)
             self.current_delta = self.maximumDeflectMeters*commandedDeflection
             self.previous_delta = self.maximumDeflectMeters*commandedDeflection
-        except:
-            self.current_delta =self.previous_delta
+        except Exception:
+            self.current_delta = self.previous_delta
 
         return self.current_delta
+
+
 """
 class XboxController(object):
     def __init__(self, gain=7e-3):
@@ -39,18 +40,19 @@ class XboxController(object):
         return self.current_delta
 """
 
+
 class WASDController(object):
-    def __init__(self, gain=7e-3):
+    def __init__(self, gain=7e-2):
         self.gain = gain
         self.last_read = 0
         self.current_delta = 0.0
 
     def compute_delta(self):
-        delta=0
+        delta = 0
         if keyboard.is_pressed('a'):
-            delta=1
+            delta = 1
         elif keyboard.is_pressed('d'):
-            delta=-1
+            delta = -1
         self.current_delta -= self.gain*delta
         return self.current_delta
 
