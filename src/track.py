@@ -8,10 +8,22 @@ import time
 from src.colours import colours
 from threading import Thread
 
+DEFAULT_VIDEO_STREAM=0
+
+def connect_stream():
+    stream = raw_input("Enter VideoStream (default {})".format(DEFAULT_VIDEO_STREAM))
+    if stream == "":
+        stream = DEFAULT_VIDEO_STREAM
+    else:
+        stream = int(stream)
+    return (stream, VideoStream(src=stream).start())
+
 
 class Camera(Thread):
     def __init__(self, colour):
-        self.stream = VideoStream(src=0).start()
+        stream = connect_stream()
+        self.stream_src = stream[0]
+        self.stream = stream[1]
         self.K = np.array([[843.417665466078, 0.0, 890.9156601341177],
                            [0.0, 641.0593481957064, 520.9331642157647],
                            [0.0, 0.0, 1.0]])
@@ -65,7 +77,8 @@ class Camera(Thread):
     def capture_and_process(self):
         frame = self.capture_frame()
         frame.find_kite(self)
-        frame = self.undistort(frame)
+        if self.stream_src == 1:
+            frame = self.undistort(frame)
         frame.rotate(90)
         frame.move_origin()
         return frame
