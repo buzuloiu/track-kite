@@ -1,8 +1,8 @@
 # from xbox360controller import Xbox360Controller
 import numpy as np
 import keyboard
-
 from src.track import Camera
+from boost_xbox_controller import XBoxControllerManager
 
 
 class RoboController(object):
@@ -36,18 +36,38 @@ class RoboController(object):
         return self.current_delta
 
 
-"""
+
 class XboxController(object):
     def __init__(self, gain=7e-3):
         self.gain = gain
-        self.controller = Xbox360Controller(0, axis_threshold=0.1)
         self.last_read = 0
         self.current_delta = 0.0
+        self.xbox_controller_manager = XBoxControllerManager()
+        self.success = self.xbox_controller_manager.initialize()
+        self.NO_ACTION = 0
+        self.LEFT_THUMBSTICK_HORIZONTAL = 1
+        self.LEFT_THUMBSTICK_VERTICAL = 2
+        self.RIGHT_THUMBSTICK_HORIZONTAL = 3
+        self.RIGHT_THUMBSTICK_VERTICAL = 4
+        self.BUTTON_PRESSED = 5
+        self.BUTTON_RELEASED = 6
+
 
     def compute_delta(self):
-        self.current_delta -= self.gain*self.controller.axis_l.x
+        event_id, value = self.xbox_controller_manager.get_next_event()
+        if event_id is self.LEFT_THUMBSTICK_HORIZONTAL:
+            if abs(value) > 30000:
+                self.current_delta -= self.gain*np.sign(value)
+                self.last_read = value
+            else:
+                self.last_read = 0
+        else:
+            self.current_delta -= self.gain*np.sign(self.last_read)
         return self.current_delta
-"""
+
+    def active(self):
+        return not keyboard.is_pressed('q')
+
 
 
 class WASDController(object):
