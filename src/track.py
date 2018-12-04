@@ -85,11 +85,7 @@ class Camera(Thread):
 
     def run(self):
         while self.active:
-            frame = self.capture_frame()
-            frame.find_kite(self)
-            frame = self.undistort(frame)
-            frame.rotate(90)
-            frame.move_origin()
+            frame = self.capture_and_process()
             self.image = frame.image
             if frame.center:
                 self.position = (frame.center[0], frame.center[1], frame.time)
