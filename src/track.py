@@ -77,8 +77,7 @@ class Camera(Thread):
     def capture_and_process(self):
         frame = self.capture_frame()
         frame.find_kite(self)
-        if self.stream_src == 1:
-            frame = self.undistort(frame)
+        frame = self.undistort(frame)
         frame.rotate(90)
         frame.move_origin()
         return frame

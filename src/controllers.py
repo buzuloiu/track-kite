@@ -14,22 +14,22 @@ class RoboController(object):
         self.current_delta = 0.0
         self.previous_delta = 0.0
         self.maximumDeflectMeters = 7.85e-1
-        self.camera = Camera('kite')
+        self.camera = Camera('boardKite')
         self.camera.activate()
 
     def compute_delta(self):
         frame = self.camera.position
         try:
             xDeflec = np.interp(frame[0], self.xRange, self.xTable)
-            xDeflec = np.around(xDeflec, decimals=2)
-            yDeflec = np.interp(frame[1], self.yRange, self.yTable)
-            yDeflec = np.around(yDeflec, decimals=2)
-            yDeflecWeight = np.multiply(yDeflec, 0.1)
+            xDeflec = np.around(xDeflec, decimals=1)
+            #yDeflec = np.interp(frame[1], self.yRange, self.yTable)
+            #yDeflec = np.around(yDeflec, decimals=2)
+            #yDeflecWeight = np.multiply(yDeflec, 0.1)
 
-            sumDeflec = np.add(xDeflec, yDeflec)
-            normDeflec = np.divide(sumDeflec, 2)
-            self.current_delta = self.maximumDeflectMeters*normDeflec
-            self.previous_delta = self.maximumDeflectMeters*normDeflec
+            #sumDeflec = np.add(xDeflec, yDeflec)
+            #normDeflec = np.divide(sumDeflec, 2)
+            self.current_delta = self.maximumDeflectMeters*xDeflec
+            self.previous_delta = self.maximumDeflectMeters*xDeflec
         except Exception:
             self.current_delta = self.previous_delta
 
@@ -38,7 +38,7 @@ class RoboController(object):
 
 
 class XboxController(object):
-    def __init__(self, gain=7e-3):
+    def __init__(self, gain=7e-2):
         self.gain = gain
         self.last_read = 0
         self.current_delta = 0.0
