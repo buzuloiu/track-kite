@@ -7,8 +7,10 @@ from src.track import Camera
 
 class RoboController(object):
     def __init__(self):
-        self.xRange = [-525, -475, -425, -325, -225, -125, -25, 0, 25, 125, 225, 325, 425, 475, 525]
+        self.xRange = [-600, -475, -425, -325, -225, -125, -25, 0, 25, 125, 225, 325, 425, 475, 600]
         self.xTable = [-1, -0.75, -0.60, -0.45, -0.40, -0.25, -0.05, 0, 0.05, 0.25, 0.40, 0.45, 0.60, 0.75, 1]
+        self.yRange = [0, 200, 400, 600, 650, 750, 800, 900, 1000, 1050, 1150, 1200, 1400, 1600, 1800]
+        self.yTable = [-1, -0.75, -0.60, -0.45, -0.05, -0.05, -0.05, 0, 0.05, 0.05, 0.05, 0.45, 0.60, 0.75, 1]
         self.current_delta = 0.0
         self.previous_delta = 0.0
         self.maximumDeflectMeters = 7.85e-1
@@ -18,9 +20,16 @@ class RoboController(object):
     def compute_delta(self):
         frame = self.camera.position
         try:
-            commandedDeflection = np.interp(frame[0], self.xRange, self.xTable)
-            self.current_delta = self.maximumDeflectMeters*commandedDeflection
-            self.previous_delta = self.maximumDeflectMeters*commandedDeflection
+            xDeflec = np.interp(frame[0], self.xRange, self.xTable)
+            xDeflec = np.around(xDeflec, decimals=2)
+            yDeflec = np.interp(frame[1], self.yRange, self.yTable)
+            yDeflec = np.around(yDeflec, decimals=2)
+            yDeflecWeight = np.multiply(yDeflec, 0.1)
+
+            sumDeflec = np.add(xDeflec, yDeflec)
+            normDeflec = np.divide(sumDeflec, 2)
+            self.current_delta = self.maximumDeflectMeters*normDeflec
+            self.previous_delta = self.maximumDeflectMeters*normDeflec
         except Exception:
             self.current_delta = self.previous_delta
 
