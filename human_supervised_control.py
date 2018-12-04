@@ -1,4 +1,4 @@
-from src.controllers import WASDController, RoboController
+from src.controllers import WASDController, RoboController, XboxController
 from src.actuators import connect_actuator
 import time
 import cv2
@@ -6,7 +6,9 @@ import cv2
 if __name__ == '__main__':
     active = True
 
-    human_controller = WASDController()
+    # human_controller = WASDController()
+    human_controller = XboxController()
+
     robot_controller = RoboController()
     actuator = connect_actuator()
 
